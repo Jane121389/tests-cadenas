@@ -1,0 +1,62 @@
+DEFINICIÓN DEL PROBLEMA: 
+
+Dado el conjunto G que contiene cadenas(genes) entre 2000 y 20000 letras del alfabeto {A,G,C,T}
+Dada una cadena M  de longitud m, una cadena N de longitud n cuyo alfabeto es Alf={A,G,C,T}
+Encontrar una cadena C C Alf de longitud ls ,que no empalme con ninguna cadena del conjunto G, donde C esta contenida en el conjunto S.
+Las cadenas del conjunto S cumplen los siguientes requisitos
+
+-s C S son subcadenas de la cadena N  de tamaño ls
+-La temperatura de disociación Tm del empalme entre una subcadena s con la cadena M debe ser maxima, s C S3 donde S3=max(Tm(S2)) ,donde Tm es una funcion que está dada por la siguiente formula
+
+Tm=(64.9 +41*(total_GC-16.4)/(total_AT+total_GC))
+          total_GC: Es el número de empalmes con las letras G y C
+          total_AT: Es el número de empalmes con las letras A y T
+
+
+Tm devulve un valor para un empalme entre la subcadena s y la cadena M, debido a que pueden existir diferentes empalmes {S2} en diferentes posiciones de la cadena M, se calcula la Tm para todos los posibles empalmes, y la función max, toma el valor  máximo del conjunto de valores de Tm de los empalmes. Por lo tanto sCS3 tiene una Tm máxima de empalme con la cadena M
+          
+-La temperatura de disociación Tm del empalme entre M y s debe ser menor o igual a una temperatura máxima Tmax, por lo tanto, Tm(S3)<=Tmax, entre menor sea la temperatura mejor, entonces s debe estar contenida en S4 donde S4 son todas las cadenas que cumplen Min(Tm(s'))<=Tmax, donde Min es una función que toma el número menor y s' C S3
+
+-El número de veces que se empalma la cadena sCS4 con la cadena N debe ser mínimo, por lo tanto,s esta contenida en S ,si para s'CS4 se cumple Min(Rep(s'), donde Rep, es una función que cuenta el numero de veces que se repite una subcadena en la cadena M.
+
+Algorítmo computacional típico
+
+-Obtener las posibles subcadenas de longitud ls contenidas en la cadena N (O(n-ls))
+-Para cada subcadena
+    -Para cada posicion de la cadena M  (O(m))
+        -tomar subcadena de tamaño ls (O(ls))
+        -Sumar los empalmes con G
+        -Sumar los empalmes con C
+        -Sumar los empalmes con T
+        -Sumar los empalmes con A
+        -Calcular la TM
+        -Quedarse con la mayor TM
+    -Quedarse con la mínima TM
+    -Quedarse con la que tenga mayor número de letras de empalmes
+    -ordenar por repeticiones (long n)
+     
+     Total O((n-ls)(m)(ls)(long n))
+     
+Mejora del algoritmo
+
+-Inicializar un arreglo suma de (m+1)x(n+1) en ceros
+-Por cada letra mi de la cadena M donde i=0...m
+    -Por cada letra nj de la cadena N donde j=0...n
+        -Si la letra mi=nj&&mi=='A' ||mi=='T'}
+            suma.TA[i+1][j+1]=suma.TA[i][j]+1
+         -de lo contrario si la letra mi=nj&&mi=='G' ||mi=='C'
+            suma.GC[i+1][j+1]=suma.GC[i][j]+1
+         -Calcular la Tm , tomando en cuenta el número de GC y AT con respecto a ls
+         -Quedarse con las posiciones de la maxima Tm
+     -Quedarse con las posiciones de la minima Tm
+     -Nuestro último indice del arreglo con las posiciones de la máxima Tm nos indica cuantas repeticiones existen 
+     -Tomo las posiciones que tengan el numero de repeticiones minimo
+     
+     Total O(nxm)
+    
+Probabilidad
+
+4²⁷=1.8x10¹⁶
+probabilidad de que aparezca una->1/1.8x10¹⁶
+en una cadena con 3000000 de letras 3/1.8x10¹⁰
+
